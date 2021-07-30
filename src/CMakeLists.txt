@@ -1,0 +1,21 @@
+cmake_minimum_required(VERSION 3.15)
+
+# Set all libs to be static
+option(BUILD_SHARED_LIBS OFF)
+
+# Vulkan
+find_package(Vulkan)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+project(Voxel
+    VERSION 0.0
+    DESCRIPTION "Voxel Engine"
+    LANGUAGES CXX
+)
+
+file(TO_CMAKE_PATH "${PROJECT_BINARY_DIR}/CMakeLists.txt" LOC_PATH)
+if (EXISTS "${LOC_PATH}")
+  message(FATAL_ERROR "build must be out of source")
+endif()
