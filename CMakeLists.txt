@@ -19,3 +19,6 @@ file(TO_CMAKE_PATH "${PROJECT_BINARY_DIR}/CMakeLists.txt" LOC_PATH)
 if (EXISTS "${LOC_PATH}")
   message(FATAL_ERROR "build must be out of source")
 endif()
+
+add_subdirectory(engine)
+add_subdirectory(third_party)
