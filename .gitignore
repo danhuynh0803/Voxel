@@ -34,3 +34,6 @@
 # Build/Install dirs
 [bB]uild
 [iI]nstall
+
+# swp files
+*.sw[a-z]
