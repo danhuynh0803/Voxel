@@ -1,4 +1,5 @@
 #include "core/application.hpp"
+#include <iostream>
 
 namespace cfv {
 
@@ -14,7 +15,7 @@ void Application::OnInit()
 
 void Application::Run()
 {
-
+	std::cout << "Hello";
 }
 
 void Application::Shutdown()

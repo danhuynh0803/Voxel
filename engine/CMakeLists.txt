@@ -1,15 +1,19 @@
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
-add_library(Engine)
+#add_library(Engine)
 
 # for including EntryPoint.h
-target_include_directories(Engine PUBLIC "./")
-
-target_sources(
+#target_include_directories(Engine PUBLIC "./")
+add_executable(
     Engine
-    PUBLIC
-        entry_point.hpp
+    ${CMAKE_SOURCE_DIR}/engine/entry_point.cpp
 )
+
+#target_sources(
+#    Engine
+#    PUBLIC
+#        entry_point.hpp
+#)
 
 if(NOT MSVC)
     find_package(X11 REQUIRED)

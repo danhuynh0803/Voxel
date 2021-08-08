@@ -9,7 +9,7 @@ struct WindowProps
     std::string title;
     uint32_t width, height;
 
-    WindowsProps(const std::string& t = "cfv",
+    WindowProps(const std::string& t = "cfv",
                  uint32_t w = 1600,
                  uint32_t h = 900)
         : title(t), width(w), height(h) {}
