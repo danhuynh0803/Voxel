@@ -4,6 +4,8 @@
 #include <memory>
 #include "renderer/vulkan_context.hpp"
 
+struct GLFWwindow;
+
 namespace cfv {
 
 struct WindowProps
@@ -11,22 +13,20 @@ struct WindowProps
     std::string title;
     uint32_t width, height;
 
-    WindowProps(const std::string& t = "cfv",
-                 uint32_t w = 1600,
-                 uint32_t h = 900)
+    WindowProps(const std::string& t,
+                uint32_t w,
+                uint32_t h)
         : title(t), width(w), height(h) {}
 };
-
-struct GLFWwindow;
 
 class Window
 {
 public:
     Window(const WindowProps& props);
-    ~Window() = default;
+    ~Window();
 
     void OnUpdate();
-    void* GetNativeWindow() const { return mWindow; }
+    GLFWwindow* GetNativeWindow() const { return mWindow; }
     uint32_t GetWidth() const { return mWidth; }
     uint32_t GetHeight() const { return mHeight; }
 

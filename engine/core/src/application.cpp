@@ -1,11 +1,20 @@
-#include "core/application.hpp"
+#define GLFW_INCLUDE_VULKAN
+#include <GLFW/glfw3.h>
+
 #include <iostream>
+#include "core/application.hpp"
+#include "core/window.hpp"
 
 namespace cfv {
 
 Application::Application(const ApplicationProps& props)
 {
+    WindowProps windowProps(props.title, props.width, props.height);
+    mWindow = std::make_unique<Window>(windowProps);
+}
 
+Application::~Application()
+{
 }
 
 void Application::OnInit()
@@ -15,12 +24,15 @@ void Application::OnInit()
 
 void Application::Run()
 {
-    std::cout << "Hello" << std::endl;
+    while (!glfwWindowShouldClose(mWindow->GetNativeWindow()))
+    {
+        mWindow->OnUpdate();
+    }
 }
 
 void Application::Shutdown()
 {
-
+    isRunning = false;
 }
 
 };

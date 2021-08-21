@@ -1,7 +1,6 @@
 #pragma once
 #include <string>
 #include <memory>
-#include "window.hpp"
 
 namespace cfv {
 
@@ -12,11 +11,13 @@ struct ApplicationProps
     uint32_t height;
 };
 
+class Window;
+
 class Application
 {
 public:
     Application(const ApplicationProps& props = {"cfv", 1600, 900});
-    ~Application() {}
+    ~Application();
 
     static Application& Get() { return *mInstance; }
 
@@ -29,6 +30,7 @@ public:
 private:
     static std::unique_ptr<Application> mInstance;
     std::unique_ptr<Window> mWindow;
+    bool isRunning = true;
 };
 
 };
