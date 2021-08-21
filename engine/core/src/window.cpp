@@ -1,14 +1,15 @@
-#include "core/window.hpp"
-
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
+
+#include "core/window.hpp"
+#include "renderer/vulkan_context.hpp"
 
 namespace cfv {
 
 Window::Window(const WindowProps& props)
-  : mTitle(props.title),
-    mWidth(props.width),
-    mHeight(props.height)
+  : mTitle(props.title)
+  , mWidth(props.width)
+  , mHeight(props.height)
 {
     glfwInit();
     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
@@ -18,7 +19,7 @@ Window::Window(const WindowProps& props)
 void Window::OnUpdate()
 {
     glfwPollEvents();
-    //context->SwapBuffers();
+    mContext->SwapBuffers();
 }
 
 }

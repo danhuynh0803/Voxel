@@ -6,7 +6,12 @@ namespace cfv {
 
 class VulkanContext
 {
+public:
+    VulkanContext() {}
+    ~VulkanContext() {}
+    void SwapBuffers();
 
+private:
 };
 
 };

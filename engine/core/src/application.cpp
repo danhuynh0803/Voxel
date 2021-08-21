@@ -15,7 +15,7 @@ void Application::OnInit()
 
 void Application::Run()
 {
-	std::cout << "Hello";
+    std::cout << "Hello" << std::endl;
 }
 
 void Application::Shutdown()

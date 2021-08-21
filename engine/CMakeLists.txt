@@ -6,14 +6,13 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 #target_include_directories(Engine PUBLIC "./")
 add_executable(
     Engine
-    ${CMAKE_SOURCE_DIR}/engine/entry_point.cpp
 )
 
-#target_sources(
-#    Engine
-#    PUBLIC
-#        entry_point.hpp
-#)
+target_sources(
+    Engine
+    PUBLIC
+        entry_point.cpp
+)
 
 if(NOT MSVC)
     find_package(X11 REQUIRED)
@@ -33,4 +32,4 @@ target_link_libraries(
 )
 
 add_subdirectory(core)
-#add_subdirectory(renderer)
+add_subdirectory(renderer)

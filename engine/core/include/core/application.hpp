@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <memory>
+#include "window.hpp"
 
 namespace cfv {
 
@@ -17,14 +18,17 @@ public:
     Application(const ApplicationProps& props = {"cfv", 1600, 900});
     ~Application() {}
 
-    static Application& Get() { return *instance; }
+    static Application& Get() { return *mInstance; }
 
     virtual void OnInit();
     virtual void Run();
     virtual void Shutdown();
 
+    Window& GetWindow() const { return *mWindow; }
+
 private:
-    static std::unique_ptr<Application> instance;
+    static std::unique_ptr<Application> mInstance;
+    std::unique_ptr<Window> mWindow;
 };
 
 };

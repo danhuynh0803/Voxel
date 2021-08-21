@@ -1,6 +1,8 @@
 #pragma once
 
 #include <string>
+#include <memory>
+#include "renderer/vulkan_context.hpp"
 
 namespace cfv {
 
@@ -33,6 +35,7 @@ private:
 
     std::string mTitle;
     uint32_t mWidth, mHeight;
+    std::unique_ptr<VulkanContext> mContext;
 };
 
 }
