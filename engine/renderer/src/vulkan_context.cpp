@@ -2,6 +2,8 @@
 #include <GLFW/glfw3.h>
 #include <stdexcept>
 
+#include "core/log.hpp"
+
 namespace cfv {
 
 VulkanContext::VulkanContext(const std::string& appName)
@@ -27,11 +29,16 @@ VulkanContext::VulkanContext(const std::string& appName)
     createInfo.ppEnabledExtensionNames = glfwExtensions;
     createInfo.enabledLayerCount = 0;
 
-    VkResult result = vkCreateInstance(&createInfo, nullptr, &mInstance);
+    VkResult result =
+        vkCreateInstance(&createInfo,
+                         nullptr,
+                         &mInstance);
 
     if (result != VK_SUCCESS) {
         throw std::runtime_error("Failed to create vkInstance");
     }
+
+    CORE_INFO("Created vkInstance");
 }
 
 VulkanContext::~VulkanContext()

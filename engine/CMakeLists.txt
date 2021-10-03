@@ -27,6 +27,7 @@ target_link_libraries(
         imgui
         glad
         glfw
+        spdlog
     PRIVATE
         vulkan
         #stb
