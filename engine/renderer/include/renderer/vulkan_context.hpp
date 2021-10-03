@@ -14,7 +14,8 @@ public:
     void SwapBuffers();
 
 private:
-    bool SupportsExtensions(const std::vector<std::string>&);
+    bool SupportsExtensions(const char** extList, uint32_t extListSize);
+    bool SupportsExtensions(const std::vector<std::string>& extensions);
 
 private:
     VkInstance mInstance;
