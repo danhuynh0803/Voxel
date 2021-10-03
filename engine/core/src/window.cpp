@@ -16,6 +16,8 @@ Window::Window(const WindowProps& props)
     glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
     mWindow = glfwCreateWindow(props.width, props.height, props.title.c_str(), nullptr, nullptr);
+
+    mContext = std::make_unique<VulkanContext>(props.title);
 }
 
 Window::~Window()
