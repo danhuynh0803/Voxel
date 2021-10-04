@@ -21,10 +21,14 @@ public:
     );
 
 private:
+    void CreateInstance();
+    void SelectPhysicalDevice();
+    bool IsDeviceSuitable(VkPhysicalDevice device);
+
     bool SupportsExtensions(const char** extList, uint32_t extListSize);
     bool SupportsExtensions(const std::vector<const char*>& extensions);
     bool SupportsLayers(const std::vector<const char*>& layers);
-    void SetupDebugMessenger(bool enableValidation);
+    void SetupDebugMessenger();
 
     // Extension proxy functions
     VkResult CreateDebugUtilsMessengerEXT(
@@ -43,7 +47,9 @@ private:
 private:
     VkInstance mInstance;
     VkDebugUtilsMessengerEXT mDebugMessenger;
-    bool enableLayers = false;
+    VkPhysicalDevice mPhysicalDevice = VK_NULL_HANDLE;
+    bool mEnableLayers = false;
+    std::string mAppName;
 };
 
 };

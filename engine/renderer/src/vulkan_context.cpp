@@ -6,17 +6,34 @@
 
 namespace cfv {
 
-VulkanContext::VulkanContext(const std::string& appName)
+VulkanContext::VulkanContext(const std::string& appName) :
+  mAppName(appName)
+{
+    CreateInstance();
+    SetupDebugMessenger();
+    SelectPhysicalDevice();
+}
+
+VulkanContext::~VulkanContext()
+{
+    if (mEnableLayers) {
+        DestroyDebugUtilsMessengerEXT(mInstance, mDebugMessenger, nullptr);
+    }
+
+    vkDestroyInstance(mInstance, nullptr);
+}
+
+void VulkanContext::CreateInstance()
 {
     #ifdef NDEBUG
-        enableLayers = false;
+        mEnableLayers = false;
     #else
-        enableLayers = true;
+        mEnableLayers = true;
     #endif
 
     VkApplicationInfo info{};
     info.sType              = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-    info.pApplicationName   = appName.c_str();
+    info.pApplicationName   = mAppName.c_str();
     info.applicationVersion = VK_MAKE_VERSION(1,0,0);
     info.pEngineName        = "voxel";
     info.engineVersion      = VK_MAKE_VERSION(1,0,0);
@@ -29,7 +46,7 @@ VulkanContext::VulkanContext(const std::string& appName)
     std::vector<const char*> extensions(glfwExtensions, glfwExtensions + glfwExtensionCount);
 
     // For debug messenger callback
-    if (enableLayers) {
+    if (mEnableLayers) {
         extensions.emplace_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
     }
 
@@ -48,11 +65,11 @@ VulkanContext::VulkanContext(const std::string& appName)
         "VK_LAYER_KHRONOS_validation",
     };
 
-    if (enableLayers && !SupportsLayers(validationLayers)) {
+    if (mEnableLayers && !SupportsLayers(validationLayers)) {
         throw std::runtime_error("Missing support for certain layers");
     }
 
-    if (enableLayers) {
+    if (mEnableLayers) {
         createInfo.enabledLayerCount   = validationLayers.size();
         createInfo.ppEnabledLayerNames = validationLayers.data();
     } else {
@@ -67,17 +84,55 @@ VulkanContext::VulkanContext(const std::string& appName)
     if (result != VK_SUCCESS) {
         throw std::runtime_error("Failed to create vkInstance");
     }
-
-    SetupDebugMessenger(enableLayers);
 }
 
-VulkanContext::~VulkanContext()
+void VulkanContext::SelectPhysicalDevice()
 {
-    if (enableLayers) {
-        DestroyDebugUtilsMessengerEXT(mInstance, mDebugMessenger, nullptr);
+    uint32_t count = 0;
+    vkEnumeratePhysicalDevices(mInstance, &count, nullptr);
+    CORE_INFO("Found {0} devices", count);
+
+    if (count = 0) {
+        throw std::runtime_error("Failed to find GPUs with Vulkan support");
     }
 
-    vkDestroyInstance(mInstance, nullptr);
+    std::vector<VkPhysicalDevice> devices(count);
+    vkEnumeratePhysicalDevices(mInstance, &count, devices.data());
+    CORE_INFO("Found {0} devices", count);
+    CORE_INFO("Devices.size {0}", devices.size());
+    for (const auto& device : devices)
+    {
+        CORE_INFO("Checking suitability");
+        if (IsDeviceSuitable(device))
+        {
+            mPhysicalDevice = device;
+            return;
+        }
+    }
+
+    if (mPhysicalDevice == VK_NULL_HANDLE) {
+        throw std::runtime_error("Failed to find a suitable GPU");
+    }
+}
+
+bool VulkanContext::IsDeviceSuitable(VkPhysicalDevice device)
+{
+    // Check device property and feature support
+    VkPhysicalDeviceProperties deviceProperties;
+    vkGetPhysicalDeviceProperties(device, &deviceProperties);
+
+    VkPhysicalDeviceFeatures deviceFeatures;
+    vkGetPhysicalDeviceFeatures(device, &deviceFeatures);
+
+    // TODO have some scoring system to select the best GPU
+    // but for now just select the first to match all desired
+    // properties and features
+    return
+         deviceProperties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU
+      && deviceFeatures.multiDrawIndirect
+      && deviceFeatures.geometryShader
+      && deviceFeatures.sparseBinding
+    ;
 }
 
 void VulkanContext::SwapBuffers()
@@ -167,9 +222,9 @@ bool VulkanContext::SupportsLayers(
     return hasSupport;
 }
 
-void VulkanContext::SetupDebugMessenger(bool enableValidation)
+void VulkanContext::SetupDebugMessenger()
 {
-    if (!enableValidation) return;
+    if (!mEnableLayers) return;
 
     VkDebugUtilsMessengerCreateInfoEXT info{};
     info.sType           = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
