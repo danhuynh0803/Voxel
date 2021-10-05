@@ -90,19 +90,15 @@ void VulkanContext::SelectPhysicalDevice()
 {
     uint32_t count = 0;
     vkEnumeratePhysicalDevices(mInstance, &count, nullptr);
-    CORE_INFO("Found {0} devices", count);
 
-    if (count = 0) {
+    if (count == 0) {
         throw std::runtime_error("Failed to find GPUs with Vulkan support");
     }
 
     std::vector<VkPhysicalDevice> devices(count);
     vkEnumeratePhysicalDevices(mInstance, &count, devices.data());
-    CORE_INFO("Found {0} devices", count);
-    CORE_INFO("Devices.size {0}", devices.size());
     for (const auto& device : devices)
     {
-        CORE_INFO("Checking suitability");
         if (IsDeviceSuitable(device))
         {
             mPhysicalDevice = device;
