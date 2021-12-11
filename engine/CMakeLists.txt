@@ -29,7 +29,7 @@ target_link_libraries(
         glfw
         spdlog
     PRIVATE
-        vulkan
+        Vulkan::Vulkan
         #stb
 )
 
